@@ -1,0 +1,68 @@
+{
+  "Configs": {
+    "EnableDebug": false
+  },
+  "Listeners": [
+    {
+      "Protocol": "HTTP",
+      "Port": 8080
+    }
+  ],
+  "RouteRules": {
+    "8080": {
+      "*": {
+        "RouteType": "HTTP",
+        "Matches": [
+          {
+            "BackendService": {
+              "backendService1": 100
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Services": {
+    "backendService1": {
+      "Endpoints": {
+        "127.0.0.1:8086": {
+          "Weight": 50
+        },
+        "127.0.0.1:8087": {
+          "Weight": 50
+        }
+      }
+    }
+  },
+  "Chains": {
+    "HTTPRoute": [
+      "common/consumer.js",
+      "http/codec.js",
+      "http/route.js",
+      "http/service.js",
+      "http/forward.js",
+      "http/default.js"
+    ],
+    "HTTPSRoute": [
+      "common/tls-termination.js",
+      "common/consumer.js",
+      "http/codec.js",
+      "http/route.js",
+      "http/service.js",
+      "http/forward.js",
+      "http/default.js"
+    ],
+    "TLSPassthrough": [
+      "tls/passthrough.js",
+      "common/consumer.js"
+    ],
+    "TLSTerminate": [
+      "common/tls-termination.js",
+      "common/consumer.js",
+      "tls/forward.js"
+    ],
+    "TCPRoute": [
+      "tcp/forward.js"
+    ]
+  }
+}
